@@ -1,4 +1,5 @@
 import streamlit as st
+from io import BytesIO
 from streamlit_cropper import st_cropper
 from streamlit.components.v1 import html
 from PIL import Image, ImageEnhance, ImageFilter, ImageDraw
@@ -68,7 +69,11 @@ if uploaded_file is not None:
     
     # Apply filters to the image
     filtered_image = apply_filters(image, brightness, contrast, sharpness, saturation, color_temperature, exposure, shadows, blur_radius, highlight)
-    
+    if filtered_image.mode != "RGB":
+        filtered_image = filtered_image.convert("RGB")
+    byte_stream = BytesIO()
+    filtered_image.save(byte_stream, format="JPEG")
+    byte_stream.seek(0)
     col1, col2 = st.columns(2)
     with col1:
             st.image(image, caption="Original Image", use_column_width=True)
@@ -76,3 +81,10 @@ if uploaded_file is not None:
     if st.sidebar.button("Show Processed Image"):    
         with col2:
             st.image(filtered_image, caption="Processed Image", use_column_width=True)
+
+    st.sidebar.download_button(
+    label="Download The Editted Photo",
+    data=byte_stream,
+    file_name="filtered_image.jpg",
+    )
+    st.sidebar.success("Click the button above to download the processed image.")
