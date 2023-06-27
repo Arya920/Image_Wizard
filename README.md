@@ -1,5 +1,5 @@
 # Image_Wizard 
-# Image Editor Web Application
+![Landing Page](https://github.com/Arya920/Image_Wizard/blob/main/webapp_ss.jpg)
 This is a web application built using Streamlit, which allows users to edit images using various image processing techniques.
 
 # Features
